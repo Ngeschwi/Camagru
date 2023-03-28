@@ -1,0 +1,39 @@
+version: '3'
+
+volumes:
+  db_data:
+    driver: local
+
+services:
+
+  backend:
+    container_name: backend
+    build: ./back/
+    volumes:
+      - ./back/src:/app/src
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+    networks:
+      - backend
+    restart: always
+
+
+  front:
+    container_name: front
+    build: ./front/
+    volumes:
+      - "./front/src:/app/src"
+      - "./front/public:/app/public"
+    ports:
+      - "8080:8080"
+    depends_on:
+      - backend
+    networks:
+      - backend
+    restart: always
+
+
+networks:
+  backend:
